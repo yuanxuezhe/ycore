@@ -1,0 +1,176 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "6_Modules/TestCallback",
+					"jsonFile" : "directory-6_Modules.TestCallback-Debug-00207cdc0ea63c3501c9.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "6_Modules/TestCallback",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "6_Modules/core",
+					"jsonFile" : "directory-6_Modules.core-Debug-da964d63919cc43b6749.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "6_Modules/core",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "7_main/testdemo",
+					"jsonFile" : "directory-7_main.testdemo-Debug-30457ec21ae32ad9bf6d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "7_main/testdemo",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "7_main/yui_gtest",
+					"jsonFile" : "directory-7_main.yui_gtest-Debug-961808a30f239806ae1e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "7_main/yui_gtest",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "5_Comm",
+					"jsonFile" : "directory-5_Comm-Debug-35f2e3606c8506c3848e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "5_Comm",
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					],
+					"name" : "fltk-demo",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "TestCallback::@f2ef6b819cb4649fedf9",
+					"jsonFile" : "target-TestCallback-Debug-3e61e78f0c3a47893239.json",
+					"name" : "TestCallback",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "comm::@4973e4ba6bc9383ba2e0",
+					"jsonFile" : "target-comm-Debug-ad4e9e1d837204c2558c.json",
+					"name" : "comm",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "core::@a15ea3acf1ab283f3f0d",
+					"jsonFile" : "target-core-Debug-65f613a10c66130ddebf.json",
+					"name" : "core",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "testdemo::@46509511032dff45b770",
+					"jsonFile" : "target-testdemo-Debug-b86bd0aa17692e820e60.json",
+					"name" : "testdemo",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "yui_gtest::@e65af58d6ba8ee292e46",
+					"jsonFile" : "target-yui_gtest-Debug-bb2625a070687f169a08.json",
+					"name" : "yui_gtest",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/workspace/c++/yui/build",
+		"source" : "D:/workspace/c++/yui"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

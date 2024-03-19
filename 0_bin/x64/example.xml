@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+	<Components>
+		<Component type="MainFrame"  id="1" title="MainFrameMainFrame"/>
+		<Component type="Button" id="2" title="button1"/>
+		<Component type="Button" id="3" title="button2"/>
+		<Component type="Button" id="4" title="button3"/>
+		<Component type="Button" id="5" title="button4"/>
+		<Component type="Edit"   id="6" title="button4"/>
+	</Components>
+	<Layout>
+		<Element id="1" pos="100,100,800,600">
+			<Element  id="2" pos="0,0,200,50"    callback="libTestCallback.dll:TestPrint2"/>
+			<Element  id="3" pos="200,0,200,50"  callback="libTestCallback.dll:TestPrint3"/>
+			<Element  id="4" pos="400,0,200,50"  callback="libTestCallback.dll:TestPrint4"/>
+			<Element  id="5" pos="600,0,200,50"  callback="libTestCallback.dll:TestPrint4"/>
+			<Element  id="6" pos="0,50,800,50"   callback=""/>
+		</Element>
+	</Layout>
+</Root>

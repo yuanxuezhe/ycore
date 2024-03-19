@@ -1,0 +1,1 @@
+  -LD:/workspace/c++/yui/0_bin/x64  -LD:/workspace/c++/yui/3_Sdk/gtest/lib/x64  -lgtest -lgtest_main -lpthread D:/workspace/c++/yui/1_lib/x64/libcomm.dll.a -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

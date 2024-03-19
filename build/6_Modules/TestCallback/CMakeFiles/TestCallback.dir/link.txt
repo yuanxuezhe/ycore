@@ -1,0 +1,3 @@
+D:\software_work\msys64\mingw64\bin\cmake.exe -E rm -f CMakeFiles\TestCallback.dir/objects.a
+D:\software_work\msys64\mingw64\bin\ar.exe qc CMakeFiles\TestCallback.dir/objects.a @CMakeFiles\TestCallback.dir\objects1.rsp
+g++  -m64 -march=x86-64 -fpermissive -w -O2 -g -shared -o D:\workspace\c++\yui\0_bin\x64\libTestCallback.dll -Wl,--out-implib,D:\workspace\c++\yui\1_lib\x64\libTestCallback.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\TestCallback.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\TestCallback.dir\linkLibs.rsp
