@@ -82,20 +82,20 @@ ${PROJECT_SOURCE_DIR}/0_bin/${platform}
 )
 
 # 编译路径下所有文件夹
-# FOREACH(dir 6_Modules 7_main)
-# 	SUBDIRLIST(sub_dirs ${PROJECT_SOURCE_DIR}/${dir})
+FOREACH(dir 6_Modules 7_main)
+	SUBDIRLIST(sub_dirs ${PROJECT_SOURCE_DIR}/${dir})
 
-# 	#排除不需要编译的文件夹
-# 	FOREACH(exclude yscore file_chooser fonts list_visuals cube tinyxml2)
-# 		list(REMOVE_ITEM sub_dirs ${exclude})
-# 	ENDFOREACH()
+	#排除不需要编译的文件夹
+	FOREACH(exclude yscore file_chooser fonts list_visuals cube tinyxml2)
+		list(REMOVE_ITEM sub_dirs ${exclude})
+	ENDFOREACH()
 
-# 	FOREACH(sub_dir ${sub_dirs})
-# 		message(STATUS "add_subdirectory:${dir}/${sub_dir}")
-# 		add_subdirectory(${dir}/${sub_dir})
-# 	ENDFOREACH() 
-# ENDFOREACH()
+	FOREACH(sub_dir ${sub_dirs})
+		message(STATUS "add_subdirectory:${dir}/${sub_dir}")
+		add_subdirectory(${dir}/${sub_dir})
+	ENDFOREACH() 
+ENDFOREACH()
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/5_Comm)
-add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/server)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/tree-simple)
 #add_subdirectory(${PROJECT_SOURCE_DIR}/Fl_ext)

@@ -4,6 +4,6 @@ cd 2_build
 cmake ..
 cmake --build .
 cd ../0_bin/x64
-yui_gtest.exe
+server.exe
 
 pause
