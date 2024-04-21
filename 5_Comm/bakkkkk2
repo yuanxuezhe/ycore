@@ -15,29 +15,6 @@ OdbcStmt::~OdbcStmt()
     close();
 }
 
-int OdbcStmt::Open(const char* sql)
-{
-    if (sql == NULL)
-    {
-        return SQL_ERROR;
-    }
-    
-    m_strSql = sql;
-
-    return SQL_SUCCESS;
-}
-
-int OdbcStmt::Exec()
-{
-    std::cout << "sql: " << m_strSql << std::endl;
-    int retcode = SQLExecDirect(m_hstmt, (SQLCHAR*)m_strSql.c_str(), SQL_NTS);
-    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO) {
-        return retcode;
-    }
-
-    return SQL_SUCCESS;
-}
-
 bool OdbcStmt::exec(const char* sql)
 {
     if (SQLExecDirect(m_hstmt, (SQLCHAR*)sql, SQL_NTS) != SQL_SUCCESS) {
@@ -65,7 +42,7 @@ void OdbcStmt::close()
 }
 
 // 根据列名获取列值
-void OdbcStmt::GetValue(const char* colName, char* colValue)
+void OdbcStmt::getFieldValueByColName(const char* colName, char* colValue)
 {
     SQLCHAR value[255];
     SQLLEN indicator;

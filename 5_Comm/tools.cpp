@@ -37,3 +37,12 @@ std::string CTools::GetVirtualStkAcct(std::string strCuacctCode, std::string str
   // 拼接前四位和后四位
   return firstStr + lastStr + strBoard;
 }
+
+// 在字符串中替换所有的子串
+void CTools::ReplaceAll(std::string& str, const std::string& from, const std::string& to) {
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+    }
+}

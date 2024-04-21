@@ -13,6 +13,10 @@ public:
 
     // 长度拼接
     static std::string GetVirtualStkAcct(std::string strCuacctCode, std::string strBoard, int len = 0);
+
+    // 在字符串中替换所有的子串
+    static void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
+
 };
 
 // 可变参数模板，处理多个参数

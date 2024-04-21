@@ -18,7 +18,7 @@ ${odbc_include_path}
 
 #链接库目录
 link_directories(
-${odbc_lib_path}
+#${odbc_lib_path}
 # ${FL_lib_path}
 #${tinyxml2_lib_path}
 )
@@ -28,4 +28,4 @@ ${odbc_lib_path}
 add_executable(${TARGET} ${DIR_SRCS})
 
 #需要链接的库名
-target_link_libraries(${TARGET}  odbc32)
+target_link_libraries(${TARGET}  comm)

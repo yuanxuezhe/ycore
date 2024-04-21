@@ -17,20 +17,7 @@ OdbcStmt::~OdbcStmt()
 
 int OdbcStmt::Open(const char* sql)
 {
-    if (sql == NULL)
-    {
-        return SQL_ERROR;
-    }
-    
-    m_strSql = sql;
-
-    return SQL_SUCCESS;
-}
-
-int OdbcStmt::Exec()
-{
-    std::cout << "sql: " << m_strSql << std::endl;
-    int retcode = SQLExecDirect(m_hstmt, (SQLCHAR*)m_strSql.c_str(), SQL_NTS);
+    int retcode = SQLPrepare(m_hstmt, (SQLCHAR*)sql, SQL_NTS);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO) {
         return retcode;
     }
@@ -38,13 +25,29 @@ int OdbcStmt::Exec()
     return SQL_SUCCESS;
 }
 
-bool OdbcStmt::exec(const char* sql)
+// 封装参数绑定的函数，区分数字和字符串
+int OdbcStmt::BindParameter(SQLUSMALLINT iIndex, SQLSMALLINT paramType, SQLLEN columnSize, const void* paramValue, SQLSMALLINT cType) {
+    return SQLBindParameter(m_hstmt, iIndex, SQL_PARAM_INPUT, cType, paramType, columnSize, 0, (SQLPOINTER)paramValue, columnSize, NULL);
+}
+
+// 封装绑定字符串参数的函数
+int OdbcStmt::SetParam(SQLUSMALLINT iIndex, const std::string& paramValue) {
+    return BindParameter(iIndex, SQL_C_CHAR, SQL_NTS, paramValue.c_str(), SQL_C_CHAR);
+}
+
+// 封装绑定数字参数的函数
+int OdbcStmt::SetParam(SQLUSMALLINT iIndex, int paramValue) {
+    return BindParameter(iIndex, SQL_INTEGER, 0, &paramValue, SQL_INTEGER);
+}
+
+int OdbcStmt::Exec()
 {
-    if (SQLExecDirect(m_hstmt, (SQLCHAR*)sql, SQL_NTS) != SQL_SUCCESS) {
-        return false;
+    int retcode = SQLExecute(m_hstmt);
+    if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO) {
+        return retcode;
     }
 
-    return true;
+    return SQL_SUCCESS;
 }
 
 bool OdbcStmt::fetch()
@@ -65,7 +68,7 @@ void OdbcStmt::close()
 }
 
 // 根据列名获取列值
-void OdbcStmt::GetValue(const char* colName, char* colValue)
+void OdbcStmt::getFieldValueByColName(const char* colName, char* colValue)
 {
     SQLCHAR value[255];
     SQLLEN indicator;
