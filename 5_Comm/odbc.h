@@ -41,7 +41,7 @@ public:
         CTools::ReplaceAll(m_strSql, key, ss.str());
     }
 
-    static void InitConnection(const char* dsn) {
+    static void InitConnection(const char* connectionString) {
         if (m_bConnected) {
             return;
         }
@@ -49,7 +49,9 @@ public:
         SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_henv);
         SQLSetEnvAttr(m_henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0);
         SQLAllocHandle(SQL_HANDLE_DBC, m_henv, &m_hdbc);
-        SQLConnect(m_hdbc, (SQLCHAR*)dsn, SQL_NTS, NULL, 0, NULL, 0);
+        //SQLConnect(m_hdbc, (SQLCHAR*)dsn, SQL_NTS, NULL, 0, NULL, 0);
+        SQLDriverConnect(m_hdbc, NULL, (SQLCHAR*)connectionString, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_COMPLETE);
+
         m_bConnected = true;
     }
 
@@ -74,3 +76,4 @@ private:
 };
 
 #endif // __ODBC_H__
+
