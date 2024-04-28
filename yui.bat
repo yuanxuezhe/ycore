@@ -6,4 +6,4 @@ cmake --build .
 cd ../0_bin/x64
 server.exe
 
-pause
+pause   

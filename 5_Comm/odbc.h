@@ -8,6 +8,23 @@
 #include "define.h"
 #include <iostream>
 #include "tools.h"
+#include "map"
+
+// 定义连接信息
+#define SQL_RESULT_LEN 240
+#define SQL_RETURN_CODE_LEN 1024
+
+// 定义枚举变量
+enum ODBC_RETURN_CODE {
+    ODBC_ERROR = -1,
+    ODBC_SUCCESS = 0,
+    ODBC_ERROR_NO_DATA = 100,
+    ODBC_ERROR_INVALID_PARAMETER = 22000,
+    ODBC_ERROR_INVALID_COLUMN = 22001,
+    ODBC_ERROR_INVALID_CURSOR = 22002,
+    ODBC_ERROR_INVALID_DESCRIPTOR = 22003,
+    ODBC_ERROR_UNKNOWN = 99999
+};
 
 class DLLExport OdbcStmt {
 public:
@@ -17,11 +34,11 @@ public:
     int Open(const char* sql);
     int Exec();
 
-    //bool connect(const char* dsn);
-    bool exec(const char* sql);
-    bool fetch();
+    bool Fetch();
     void close();
-    void GetValue(const char* colName, char* colValue);
+    ODBC_RETURN_CODE GetValue(const char* colName, int& colValue);
+    ODBC_RETURN_CODE GetValue(const char* colName, const char* colValue, size_t colValueLen);
+    int PrintDatabaseSet();
     // 获取并输出最后一次的错误信息
     void getLastError();
 
@@ -64,7 +81,9 @@ public:
         SQLFreeHandle(SQL_HANDLE_DBC, m_hdbc);
         SQLFreeHandle(SQL_HANDLE_ENV, m_henv);
     }
-
+//private:
+public:
+    void DescribeColumns();
 private:
     static SQLHENV m_henv;
     static SQLHDBC m_hdbc;
@@ -72,6 +91,7 @@ private:
 
     SQLHSTMT m_hstmt;
 
+    std::map<std::string, int> m_mpColumnIndex;
     std::string m_strSql;
 };
 
