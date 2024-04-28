@@ -35,7 +35,7 @@ public:
     int Exec();
 
     bool Fetch();
-    void close();
+    void Close();
     ODBC_RETURN_CODE GetValue(const char* colName, int& colValue);
     ODBC_RETURN_CODE GetValue(const char* colName, const char* colValue, size_t colValueLen);
     int PrintDatabaseSet();
