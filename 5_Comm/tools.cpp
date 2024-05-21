@@ -46,3 +46,12 @@ void CTools::ReplaceAll(std::string& str, const std::string& from, const std::st
         start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
 }
+
+bool CTools::CheckAndSetEmpty(char*& szSrc) {
+    if (szSrc == nullptr) {
+        szSrc = new char[1]; // 分配一个字符的空间
+        szSrc[0] = '\0';     // 设置为空字符
+        return false;
+    }
+    return true;
+}

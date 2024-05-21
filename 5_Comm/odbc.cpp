@@ -38,6 +38,11 @@ int OdbcStmt::Exec()
     return SQL_SUCCESS;
 }
 
+std::string OdbcStmt::GetExecSql()
+{
+    return m_strSql;
+}
+
 bool OdbcStmt::Fetch()
 {
     if (SQLFetch(m_hstmt) != SQL_SUCCESS) {

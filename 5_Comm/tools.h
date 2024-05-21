@@ -17,6 +17,7 @@ public:
     // 在字符串中替换所有的子串
     static void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
 
+    static bool CheckAndSetEmpty(char*& szSrc);
 };
 
 // 可变参数模板，处理多个参数

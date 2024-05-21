@@ -33,7 +33,7 @@ public:
 
     int Open(const char* sql);
     int Exec();
-
+    std::string GetExecSql();
     bool Fetch();
     void Close();
     ODBC_RETURN_CODE GetValue(const char* colName, int& colValue);
@@ -65,8 +65,15 @@ public:
         // 初始化 ODBC 连接
         SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_henv);
         SQLSetEnvAttr(m_henv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0);
+
         SQLAllocHandle(SQL_HANDLE_DBC, m_henv, &m_hdbc);
-        //SQLConnect(m_hdbc, (SQLCHAR*)dsn, SQL_NTS, NULL, 0, NULL, 0);
+
+        // // Set the connection charset to UTF-8
+        // SQLINTEGER charset = SQL_UTF8;
+        // SQLSetConnectAttr(m_hdbc, SQL_ATTR_CONNECTION_CHARSET, (SQLPOINTER)charset, SQL_IS_INTEGER);
+
+
+
         SQLDriverConnect(m_hdbc, NULL, (SQLCHAR*)connectionString, SQL_NTS, NULL, 0, NULL, SQL_DRIVER_COMPLETE);
 
         m_bConnected = true;

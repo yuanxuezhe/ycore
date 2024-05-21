@@ -10,7 +10,6 @@ aux_source_directory(. DIR_SRCS)
 
 #需要包含的头文件目录
 include_directories(
-${Comm_include_path}
 ${Modules_include_path}
 ${tinyxml2_include_path}
 )

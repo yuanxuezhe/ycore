@@ -35,8 +35,8 @@ ENDMACRO()
 
 #判断编译器类型,如果是gcc编译器,添加编译选项
 if(CMAKE_COMPILER_IS_GNUCXX)
-	set(platform x64)
-	
+	#set(platform x64)
+	set(platform Lnx64)
 	#输出make的过程
 	#set(CMAKE_VERBOSE_MAKEFILE ON)
 	
@@ -71,31 +71,41 @@ ENDFOREACH()
 
 #需要包含的头文件目录
 include_directories(
-${FL_include_path}
-${FL_include_path}
 ${PROJECT_SOURCE_DIR}/4_Public
+${FL_include_path}
+${FL_include_path}
+${spdlog_include_path}
+${Comm_include_path}
 )
 
 #链接库目录
-link_directories(	
+link_directories(
 ${PROJECT_SOURCE_DIR}/0_bin/${platform}
+${spdlog_lib_path}
+${Comm_lib_path}
 )
 
-# 编译路径下所有文件夹
-# FOREACH(dir 6_Modules 7_main)
-# 	SUBDIRLIST(sub_dirs ${PROJECT_SOURCE_DIR}/${dir})
-
-# 	#排除不需要编译的文件夹
-# 	FOREACH(exclude yscore file_chooser fonts list_visuals cube tinyxml2)
-# 		list(REMOVE_ITEM sub_dirs ${exclude})
-# 	ENDFOREACH()
-
-# 	FOREACH(sub_dir ${sub_dirs})
-# 		message(STATUS "add_subdirectory:${dir}/${sub_dir}")
-# 		add_subdirectory(${dir}/${sub_dir})
-# 	ENDFOREACH() 
-# ENDFOREACH()
-
 add_subdirectory(${PROJECT_SOURCE_DIR}/5_Comm)
-add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/server)
+
+# 编译路径下所有文件夹
+#FOREACH(dir 6_Modules 7_main)
+FOREACH(dir 7_main)
+	SUBDIRLIST(sub_dirs ${PROJECT_SOURCE_DIR}/${dir})
+
+	#排除不需要编译的文件夹
+ 	FOREACH(exclude spider testdemo yui_gtest)
+ 		list(REMOVE_ITEM sub_dirs ${exclude})
+ 	ENDFOREACH()
+
+ 	FOREACH(sub_dir ${sub_dirs})
+ 		message(STATUS "add_subdirectory:${dir}/${sub_dir}")
+ 		add_subdirectory(${dir}/${sub_dir})
+ 	ENDFOREACH() 
+ENDFOREACH()
+
+#add_subdirectory(${PROJECT_SOURCE_DIR}/5_Comm)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/server)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/libevent_demo)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/amqp_demo)
+#add_subdirectory(${PROJECT_SOURCE_DIR}/7_main/tinyxml_demo)
 #add_subdirectory(${PROJECT_SOURCE_DIR}/Fl_ext)

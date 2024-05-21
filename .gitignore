@@ -1,6 +1,7 @@
 #dirs
 .vscode/
 2_build/
+6_Modules.bak/
 # Prerequisites
 *.d
 
