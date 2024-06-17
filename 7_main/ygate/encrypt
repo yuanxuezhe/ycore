@@ -1,0 +1,56 @@
+#include <iostream>
+#include <openssl/aes.h>
+
+// 定义一个简单的结构体表示用户信息
+struct UserInfo {
+    std::string username;
+    int age;
+    std::string email;
+};
+
+// 加密函数
+void encryptData(const unsigned char* plaintext, int plaintext_len, unsigned char* key,
+                 unsigned char* iv, unsigned char* ciphertext) {
+    AES_KEY aesKey;
+    AES_set_encrypt_key(key, 128, &aesKey);
+    AES_cbc_encrypt(plaintext, ciphertext, plaintext_len, &aesKey, iv, AES_ENCRYPT);
+}
+
+// 解密函数
+void decryptData(const unsigned char* ciphertext, int ciphertext_len, unsigned char* key,
+                 unsigned char* iv, unsigned char* decryptedtext) {
+    AES_KEY aesKey;
+    AES_set_decrypt_key(key, 128, &aesKey);
+    AES_cbc_encrypt(ciphertext, decryptedtext, ciphertext_len, &aesKey, iv, AES_DECRYPT);
+}
+
+int main() {
+    // 定义一个用户信息结构体
+    UserInfo user;
+    user.username = "Alice";
+    user.age = 30;
+    user.email = "alice@example.com";
+
+    // 转换结构体为字符数组
+    std::string data(reinterpret_cast<char*>(&user), sizeof(UserInfo));
+
+    // AES 加密密钥和初始向量
+    unsigned char key[AES_BLOCK_SIZE] = "0123456789abcdef"; // 16 字节密钥
+    unsigned char iv[AES_BLOCK_SIZE] = "aaaaaaaaaaaaaaaa";  // 16 字节初始向量
+
+    // 加密数据
+    unsigned char encryptedData[data.size()];
+    encryptData(reinterpret_cast<const unsigned char*>(data.c_str()), data.size(), key, iv, encryptedData);
+
+    // 解密数据
+    unsigned char decryptedData[data.size()];
+    decryptData(encryptedData, data.size(), key, iv, decryptedData);
+
+    // 打印解密后的数据
+    UserInfo decryptedUser = *reinterpret_cast<UserInfo*>(decryptedData);
+    std::cout << "Decrypted username: " << decryptedUser.username << std::endl;
+    std::cout << "Decrypted age: " << decryptedUser.age << std::endl;
+    std::cout << "Decrypted email: " << decryptedUser.email << std::endl;
+
+    return 0;
+}

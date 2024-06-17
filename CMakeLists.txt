@@ -57,6 +57,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/1_lib/${platform})
 
 #设置包含目录
 set(Comm_include_path ${PROJECT_SOURCE_DIR}/5_Comm)
+set(Tables_include_path ${PROJECT_SOURCE_DIR}/tables)
 set(Modules_include_path ${PROJECT_SOURCE_DIR}/6_Modules)
 set(Source_include_path ${PROJECT_SOURCE_DIR}/8_source)
 #分别保存Sdk下的所有头文件和库文件路径
@@ -76,6 +77,7 @@ ${FL_include_path}
 ${FL_include_path}
 ${spdlog_include_path}
 ${Comm_include_path}
+${Tables_include_path}
 )
 
 #链接库目录

@@ -6,18 +6,11 @@
 #include <event2/bufferevent.h>
 #include <arpa/inet.h>
 #include "msg.h"
-#define MESSAGE_COUNT 10
+#define MESSAGE_COUNT 10000
 
 // 回调函数，当读取到数据时被调用
 void read_cb(struct bufferevent *bev, void *ctx) {
     struct evbuffer *input = bufferevent_get_input(bev);
-    // char *msg;
-    // size_t len;
-    // // 读取数据
-    // while ((msg = evbuffer_readln(input, &len, EVBUFFER_EOL_CRLF))) {
-    //     printf("Received message: %s\n", msg);
-    //     free(msg);
-    // }
     if (evbuffer_get_length(input) < MSG_HEADER_BYTES)
     {
         return;
@@ -77,14 +70,17 @@ void stdin_cb(evutil_socket_t fd, short events, void *arg) {
     if (fgets(msg, sizeof(msg), stdin)) {
         // 移除末尾的换行符
        //msg[strcspn(msg, "\n")] = '\0';
-
+       char message[256] = {0};
+            //snprintf(message, sizeof(message), "Message %s", msg);
+           
+            //bufferevent_write(bev, message, sizeof(message));
         
         for (int i = 0; i < MESSAGE_COUNT; ++i) {
             // 发送消息到服务端
             char message[256] = {0};
-            snprintf(message, sizeof(message), "Message %d", i+1);
+            snprintf(message, sizeof(message), "Message %d  %s", i+1, msg);
             auto formatmsg = Message::FormatMsg(message, strlen(message));
-            
+            //bufferevent_write(bev, message, sizeof(message));
             bufferevent_write(bev, std::get<0>(formatmsg), std::get<1>(formatmsg));
         }
     }
@@ -99,7 +95,7 @@ int main() {
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = inet_addr("127.0.0.1");
-    sin.sin_port = htons(8090);
+    sin.sin_port = htons(8989);
 
     // 连接服务器
     bufferevent_socket_connect(bev, (struct sockaddr *)&sin, sizeof(sin));

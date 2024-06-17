@@ -4,10 +4,15 @@
 #include "define.h"
 #include "CommStruct.h"
 #include "tools.h"
-#include "ystream.h"
+#include "sql.h"
+#include "sqltypes.h"
+#include "sqlext.h"
 #include <spdlog/spdlog.h>
 #include "spdlog/sinks/rotating_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+//#include <event2/event.h>
+//#include <amqpcpp.h>
+//#include <amqpcpp/libevent.h>
 
 // 基类，所有的开发需要继承此基类
 class DLLExport CCore {
@@ -31,7 +36,8 @@ public:
 
     // 初始化LOG句柄
     int InitLogger(CLog& log);
-
+    // 初始化AMQP连接
+    int InitAmqp(CConfig& config);
     // 初始化ODBC句柄
     int InitOdbc(std::map<std::string, CXa>& mpXa);
 
@@ -39,8 +45,13 @@ public:
     SQLHENV m_henv;
     SQLHDBC m_hdbc;
     std::shared_ptr<spdlog::logger> logger;
+    //AMQP::TcpChannel* channel;
 private:
+    //struct event_base* evbase;
+    //AMQP::LibEventHandler* handler;
+    //AMQP::TcpConnection *connection;
     bool bInitLogger;
+    bool bInitAmqp;
     bool bInitOdbc;
     //std::map<std::string, SQLHDBC> m_mapHdbc;
 };

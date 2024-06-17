@@ -4,6 +4,7 @@
 #include "praseconfig.h"
 #include "ystream.h"
 #include "tinyxml2.h"
+#include "tcpserver.h"
 
 struct LiteMall {
     int nId;
@@ -23,11 +24,16 @@ struct CUser {
     char cSex;
 };
 
+void Call(CCore* core, std::string msg) {
+    core->logger->info("Call:{}", msg);
+}
 
 int main() {
     // 配置结构体
     CConfig config;
-    PraseConfig::PraseXmlFile(config);
+    if(!PraseConfig::PraseXmlFile(config)) {
+        return -1;
+    }
 
     CCore* core = new CCore();
     // 初始化核心模块
@@ -39,10 +45,15 @@ int main() {
     core->logger->info("system start successfully");
     core->logger->info("");
     core->logger->info("");
-    
+
+    core->logger->info("msgqueue:{}, connstr:{}", config.msgqueue.szName, config.msgqueue.szConnstr);
+    // 打印配置里的队列信息map信息 config.mpQueue
+    for (auto& it : config.mpQueue) {
+        core->logger->info("queue:{} maxdepth:{}", it.first, it.second.nMaxDepth);
+    }
+
     CYStream odbc(core);
-    odbc.Open("SELECT * FROM USER where ID = {@1}");
-    odbc.SetParam<int>(1, 1);
+    odbc.Open("SELECT * FROM USER where ID in ({})", P(10000));
     odbc.Exec();
 
     CUser user;
@@ -58,7 +69,15 @@ int main() {
     }
    
     odbc.Close();
-    delete core;
+
+    EventCenter server;
+    server.InitNetCenter(config.server.iPort);
+    server.InitAmqpCenter();
+
+    core->logger->info("Server started, port:{} waiting for connections...", config.server.iPort);
+
+    server.start();
+    core->logger->info("over");
 
     return 0;
 }

@@ -9,6 +9,7 @@ aux_source_directory(. DIR_SRCS)
 include_directories(
 ${odbc_include_path}
 ${tinyxml2_include_path}
+#${amqp_include_path}
 )
 
 #链接库目录
@@ -16,6 +17,7 @@ link_directories(
 ${odbc_lib_path}
 # ${FL_lib_path}
 ${tinyxml2_lib_path}
+#${amqp_lib_path}
 )
 
 #生成动态库 add_library要在target_link_libraries 之前
@@ -24,3 +26,4 @@ add_library(${TARGET} SHARED ${DIR_SRCS})
 
 #需要链接的库名
 target_link_libraries(${TARGET} odbc spdlog tinyxml2)
+#target_link_libraries(${TARGET} odbc spdlog tinyxml2 amqpcpp event pthread dl ssl)

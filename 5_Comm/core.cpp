@@ -1,9 +1,12 @@
 #include "core.h"
 
 
-CCore::CCore(): bInitLogger(false),
-        bInitOdbc(false)
+CCore::CCore()
+        : bInitLogger(false),
+        bInitOdbc(false),
+        bInitAmqp(false)
 {
+    //evbase = event_base_new();
     m_henv = SQL_NULL_HENV;
     m_hdbc = SQL_NULL_HDBC;
 }
@@ -13,6 +16,8 @@ int CCore::Init(CConfig &config)
 {
     // 初始化日志
     InitLogger(config.log);
+    // 初始化AMQP连接
+    InitAmqp(config);
     // 初始化xa连接
     InitOdbc(config.mpXa);
     return 1;
@@ -62,6 +67,33 @@ int CCore::InitLogger(CLog& log)
 
     bInitLogger = true;
     return 0;
+}
+
+// 初始化AMQP连接
+int CCore::InitAmqp(CConfig& config)
+{
+    if (bInitAmqp)
+    {
+        return 1;
+    }
+    // 创建AMQP连接
+
+        // handler for libevent
+    //handler = new AMQP::LibEventHandler(evbase);
+
+    // make a connection
+    //connection = new AMQP::TcpConnection(handler, AMQP::Address(config.msgqueue.szConnstr));
+
+    // we need a channel too
+    //channel = new AMQP::TcpChannel(connection);
+
+    // 创建队列
+    //channel->declareQueue("my_queue", AMQP::durable).onSuccess([](const std::string &name, uint32_t messagecount, uint32_t consumercount) {
+    //    std::cout << "declared queue " << name << std::endl;
+    //});
+
+    //createQueue("my_queue", &channel);
+
 }
 
 // 初始化ODBC句柄

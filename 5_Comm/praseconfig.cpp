@@ -27,6 +27,10 @@ bool PraseConfig::PraseXmlFile(CConfig &config)
         return false;
     }
 
+    // 遍历子元素查找server标签
+    tinyxml2::XMLElement* server = root->FirstChildElement("server");
+    config.server.iPort = atoi(server->Attribute("port"));
+    
     // 遍历子元素查找log标签
     tinyxml2::XMLElement* log = root->FirstChildElement("log");
     config.log.cModel = log->Attribute("model")[0];

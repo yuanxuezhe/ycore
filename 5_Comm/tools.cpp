@@ -47,6 +47,21 @@ void CTools::ReplaceAll(std::string& str, const std::string& from, const std::st
     }
 }
 
+void CTools::SplitString(const std::string& str, const std::string& pattern, std::vector<std::string>& result)
+{
+    std::string::size_type pos;
+    std::string::size_type start = 0;
+    result.clear();
+    pos = str.find(pattern);
+    while (pos != std::string::npos)
+    {
+        result.push_back(str.substr(start, pos - start));
+        start = pos + pattern.size();
+        pos = str.find(pattern, start);
+    }
+    result.push_back(str.substr(start));
+}
+
 bool CTools::CheckAndSetEmpty(char*& szSrc) {
     if (szSrc == nullptr) {
         szSrc = new char[1]; // 分配一个字符的空间
@@ -54,4 +69,57 @@ bool CTools::CheckAndSetEmpty(char*& szSrc) {
         return false;
     }
     return true;
+}
+
+// 正则表达式匹配
+void CTools::RegexMatch(const std::string& str, const std::string& pattern, std::vector<std::string>& result)
+{
+  result.clear();
+  std::regex regex(pattern);
+  // 进行匹配并输出所有匹配的子串
+  auto words_begin = std::sregex_iterator(str.begin(), str.end(), regex);
+  auto words_end = std::sregex_iterator();
+
+  std::map<std::string, std::string> mpReplace;
+
+  for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+      std::smatch match = *i;
+      std::string match_str = match.str();
+      //std::cout << "Found match: " << match_str << std::endl;
+      result.push_back(match_str);
+  }
+
+  return;
+}
+
+// 驼峰命名
+std::string CTools::CamelName(std::string name)
+{
+    std::istringstream iss(name);
+    std::string word;
+    std::string camelCaseName;
+    bool firstWord = true;
+    while (std::getline(iss, word, '_')) {
+        camelCaseName += [](std::string& tmp) -> std::string {
+            if (tmp.empty()) return tmp;
+            std::string result = tmp;
+            // 单词全部小写
+            for (char &c : result) {
+                c = std::tolower(c);
+            }
+            // 第一个字母大写
+            result[0] = std::toupper(result[0]);
+            return result;
+        }(word);
+    }
+
+    return camelCaseName;
+}
+
+std::string CTools::UpperLowerSwitch(std::string src, char cFlag)
+{
+    std::transform(src.begin(), src.end(), src.begin(),
+        [cFlag](unsigned char c){ return cFlag == '1' ? std::toupper(c) : std::tolower(c); }
+    );
+    return src;
 }

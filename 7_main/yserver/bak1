@@ -1,0 +1,107 @@
+#include <amqpcpp.h>
+#include <amqpcpp/libevent.h>
+#include <event2/listener.h>
+#include <event2/bufferevent.h>
+#include <event.h>
+#include <iostream>
+
+// 自定义 AMQP 事件处理器类
+class MyAMQPHandler : public AMQP::LibEventHandler {
+public:
+    MyAMQPHandler(struct event_base *base) : AMQP::LibEventHandler(base) {}
+
+    void onError(AMQP::TcpConnection *connection, const char *message) override {
+        std::cerr << "AMQP connection error: " << message << std::endl;
+    }
+
+    void onConnected(AMQP::TcpConnection *connection) override {
+        std::cout << "AMQP connected" << std::endl;
+    }
+
+    void onReady(AMQP::TcpConnection *connection) override {
+        std::cout << "AMQP connection ready" << std::endl;
+    }
+
+    void onClosed(AMQP::TcpConnection *connection) override {
+        std::cout << "AMQP connection closed" << std::endl;
+    }
+};
+
+// 自定义 libevent 事件处理器类
+class MyEventHandler {
+public:
+    MyEventHandler(struct event_base *base, AMQP::TcpChannel *channel)
+        : base_(base), channel_(channel) {}
+
+    static void acceptCallback(struct evconnlistener *listener, evutil_socket_t fd,
+                               struct sockaddr *address, int socklen, void *arg) {
+        MyEventHandler *handler = static_cast<MyEventHandler *>(arg);
+        handler->handleAccept(fd);
+    }
+
+    void handleAccept(evutil_socket_t fd) {
+        struct bufferevent *bev = bufferevent_socket_new(base_, fd, BEV_OPT_CLOSE_ON_FREE);
+        bufferevent_setcb(bev, readCallback, nullptr, eventCallback, this);
+        bufferevent_enable(bev, EV_READ | EV_WRITE);
+    }
+
+    static void readCallback(struct bufferevent *bev, void *arg) {
+        char buf[1024];
+        size_t n;
+        while ((n = bufferevent_read(bev, buf, sizeof(buf))) > 0) {
+            std::string message(buf, n);
+            std::cout << "Received message: " << message << std::endl;
+
+            // 将消息写入 AMQP 队列
+            AMQP::Envelope envelope(message.c_str(), message.length());
+            channel_->publish("", "my_queue", envelope);
+        }
+    }
+
+    static void eventCallback(struct bufferevent *bev, short events, void *arg) {
+        if (events & BEV_EVENT_ERROR) {
+            std::cerr << "Error in bufferevent" << std::endl;
+        }
+        bufferevent_free(bev);
+    }
+
+private:
+    struct event_base *base_;
+    static AMQP::TcpChannel *channel_;
+};
+
+AMQP::TcpChannel *MyEventHandler::channel_;
+
+int main() {
+    struct event_base *base = event_base_new();
+
+    // 创建 AMQP 连接和通道
+    AMQP::Address address("amqp://guest:guest@localhost/");
+    AMQP::TcpConnection connection(new MyAMQPHandler(base), address);
+    AMQP::TcpChannel channel(&connection);
+
+    // 创建 libevent 的监听器
+    struct sockaddr_in sin;
+    memset(&sin, 0, sizeof(sin));
+    sin.sin_family = AF_INET;
+    sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    sin.sin_port = htons(12345);
+
+    struct evconnlistener *listener = evconnlistener_new_bind(
+        base, MyEventHandler::acceptCallback, new MyEventHandler(base, &channel),
+        LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE, -1, (struct sockaddr *)&sin, sizeof(sin));
+
+    if (!listener) {
+        std::cerr << "Error creating listener" << std::endl;
+        return 1;
+    }
+
+    std::cout << "Listening for connections on port 12345" << std::endl;
+
+    event_base_dispatch(base);
+
+    evconnlistener_free(listener);
+    event_base_free(base);
+
+    return 0;
+}

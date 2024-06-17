@@ -11,11 +11,13 @@ aux_source_directory(. DIR_SRCS)
 #需要包含的头文件目录
 include_directories(
 ${tinyxml2_include_path}
+${amqp_include_path}
 )
 
 #链接库目录
 link_directories(
 ${tinyxml2_lib_path}
+${amqp_lib_path}
 )
 
 #生成动态库 add_library要在target_link_libraries 之前
@@ -23,4 +25,4 @@ ${tinyxml2_lib_path}
 add_executable(${TARGET} ${DIR_SRCS})
 
 #需要链接的库名
-target_link_libraries(${TARGET}  comm tinyxml2)
+target_link_libraries(${TARGET}  event comm tinyxml2 amqpcpp event pthread dl ssl)

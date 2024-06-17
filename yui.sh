@@ -1,12 +1,13 @@
 CURRENT_DIR=$(pwd)
 BUILD_DIR="2_build"
 EXE_DIR="0_bin/Lnx64"
-FILE_NAME="yserver"
+#FILE_NAME="ygate"
+FILE_NAME="AutoTable2Code"
 #rm -rf $BUILD_DIR
 
 #exec "scl enable devtoolset-11 bash"
 
-lsof -ti:8090 | xargs -r kill -9
+lsof -ti:8989 | xargs -r kill -9
 
 if [ ! -d "$BUILD_DIR" ]; then
     mkdir -p "$BUILD_DIR"
