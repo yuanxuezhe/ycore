@@ -3,7 +3,6 @@
 CYStream::CYStream(CCore* core): m_core(core),m_hstmt(SQL_NULL_HSTMT),m_strSql("")
 {
     SQLAllocHandle(SQL_HANDLE_STMT, m_core->m_hdbc, &m_hstmt);
-    m_core->logger->info("CYStream()");
 }
 
 CYStream::~CYStream()
@@ -54,7 +53,6 @@ void CYStream::Close()
     if (m_hstmt != SQL_NULL_HSTMT) {
         SQLFreeHandle(SQL_HANDLE_STMT, m_hstmt);
         m_hstmt = SQL_NULL_HSTMT;
-        m_core->logger->info("Close()");
     }
 }
 
@@ -237,15 +235,7 @@ void CYStream::GetTableAllAttrs(TableInfo& tableInfo)
     // 获取表的字段及属性
     SQLColumns(m_hstmt, NULL, 0, NULL, 0, (SQLCHAR*)tableInfo.szTableName, SQL_NTS, NULL, 0);
 
-    std::cout << "表字段及属性：" << std::endl;
     while (SQLFetch(m_hstmt) == SQL_SUCCESS) {
-        /*
-        4 对应列名 (COLUMN_NAME)。
-        5 对应数据类型 (DATA_TYPE)。
-        7 对应列大小 (COLUMN_SIZE)。
-        9 对应小数位数 (DECIMAL_DIGITS)。
-        11 对应是否允许空值 (NULLABLE)。
-        */
         SQLCHAR colName[256];
         SQLLEN colNameLen;
         SQLSMALLINT dataType;
@@ -298,13 +288,6 @@ void CYStream::GetTableAllAttrs(TableInfo& tableInfo)
         }
 
         tableInfo.vcColumnInfo.push_back(columnInfo);
-        // std::cout << "Column Name: " << colName << std::endl;
-        // std::cout << "Data Type: " << (ODBC_DATA_TYPE)dataType <<  "   "  << columnKey << std::endl;
-        // std::cout << "Column Size: " << columnSize << std::endl;
-        // std::cout << "Decimal Digits: " << decimalDigits << std::endl;
-        // std::cout << "Nullable: " << nullable << std::endl;
-        // std::cout << "Remarks: " << remarks << std::endl;
-        //std::cout << "--------------------------------------" << std::endl;
     }
 }
 
@@ -360,7 +343,6 @@ void CYStream::GetIndex(TableInfo& tableInfo)
 {
     SQLStatistics(m_hstmt, NULL, 0, NULL, SQL_NTS, (SQLCHAR*)tableInfo.szTableName, SQL_NTS, SQL_INDEX_ALL, SQL_ENSURE);
     
-    std::cout << "-------------------INDEX--------------------"  << std::endl;
     SQLCHAR indexName[256], columnName[256];
     SQLSMALLINT nonUnique, type;
     while (SQLFetch(m_hstmt) == SQL_SUCCESS) {
@@ -386,6 +368,4 @@ void CYStream::GetIndex(TableInfo& tableInfo)
             tableInfo.mpIndex[(char*)indexName].push_back(GetColumnInfo((char*)columnName,tableInfo));
         }
     }
-
-    std::cout << "-------------------INDEX--------------------"  << std::endl;
 }

@@ -21,18 +21,19 @@ int main() {
     core->logger->info("*                    yserver   autosql                   *");
     core->logger->info("*                        v:1.0.0.1                       *");
     core->logger->info("**********************************************************");
-    core->logger->info("system start successfully");
     core->logger->info("");
     core->logger->info("");
 
 
     std::vector<TableInfo> vcTables;
 
+    core->logger->info("获取所有表信息");
     // 取odbc所有表信息
     CYStream odbc1(core);
     odbc1.GetAllTables(vcTables);
     odbc1.Close();
     
+    core->logger->info("获取所有字段信息");
     // 取odbc所有字段信息
     for (auto& it : vcTables) {
         CYStream odbc2(core);
@@ -40,6 +41,7 @@ int main() {
         odbc2.Close();
     }
 
+    core->logger->info("获取主键信息");
     // 取odbc主键索引信息
     for (auto& it : vcTables) {
         CYStream odbc3(core);
@@ -47,12 +49,14 @@ int main() {
         odbc3.Close();
     }
     
+    core->logger->info("获取模板test.tmp信息");
     // 取模板信息
     std::string strTemplate = Auto2Code::LoadCodeTemplate("test.tmp");
 
     // 正则表达式获取参数
     std::vector<std::string> vcRegMatch;
     CTools::RegexMatch(strTemplate, "(%%[^%]+%%)", vcRegMatch);
+    core->logger->info("根据表信息生成代码");
     /* 打印vcRegMatch*/
     for (auto& table : vcTables)
     {
@@ -60,27 +64,15 @@ int main() {
         for (auto& regmatch : vcRegMatch)
         {
             std::string res = Auto2Code::RuleTransfor(table, regmatch);
-            //core->logger->info("{:<50}  ====>           {}", regmatch, Auto2Code::RuleTransfor(table, res));
-
             CTools::ReplaceAll(tmp, regmatch, res);
         }
 
-        Auto2Code::IntoFile(tmp, fmt::format("tables/{}.h",CTools::UpperLowerSwitch(table.szTableName, '0')));
+        std::string file = fmt::format("tables/{}.h",CTools::UpperLowerSwitch(table.szTableName, '0'));
+        core->logger->info("生成文件:{}", file);
+        Auto2Code::IntoFile(tmp, file);
     }
 
-
-    // for (auto& it : vcTables) {
-    //     std::cout << "class " << it.first << " {" << std::endl;
-    //     //core->logger->info("table_name:{}", it.first);
-    //     for (auto& it1 : it.second) {
-    //         std::cout << "    " << CTools::CamelName(it1.szColumnName) << ";        // " << it1.szColumnComment << std::endl;
-    //         //core->logger->info("column_name:{} column_comment:{} column_size:{} column_type:{} nullable:{}, paramname:{}"
-    //         //    , it1.szColumnName, it1.szColumnComment, it1.nColumnSize, (int)it1.odbcDataType, it1.nNullable, CTools::CamelName(it1.szColumnName));
-    //     }
-    //     std::cout << "};" << std::endl;
-    // }
-
-    core->logger->info("over {2} {4} ", 1,2,3,4,5,6,7,8);
+    core->logger->info("over");
 
     return 0;
 }

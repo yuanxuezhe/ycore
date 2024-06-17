@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <server port="8989"/>
+    <!-- 
+        model: 0|不开启日志 1|开启日志并输出到控制台 2|开启日志并输出到文件 3|开启日志并同时输出到控制台和文件
+        pattern: 日志格式
+        filepath: 日志文件路径
+        consolelvl: 控制台日志级别
+        loglvl: 日志文件级别
+        filesize: 日志文件大小，单位MB
+        maxfiles: 日志文件最大数量
+    -->
+    <log model="3" 
+        consolelvl="debug" 
+        loglvl="debug"
+        pattern="[%Y%m%d %H%M%S %e][%P - %t][%l] %v" 
+        filepath="logs/rotating_log.log"
+        filesize="10"
+        maxfiles="100"
+        />
+    <msgqueues name="rabbitmq" type="AMQP" connstr="amqp://74.48.82.137:5672/">
+        <queue name="queue1" maxdepth="1000"/>
+        <queue name="queue2" maxdepth="1000"/>
+        <queue name="queue3" maxdepth="1000"/>
+        <queue name="queue4" maxdepth="1000"/>
+        <queue name="queue5" maxdepth="1000"/>
+    </msgqueues>
+    <xas>
+        <xa name='DB1' connstr="DRIVER={MySQL ODBC 8.4 Unicode Driver};SERVER=74.48.82.137:53306;DATABASE=djb;USER=root;PASSWORD=1;CHARSET=UTF8;"/>
+        <!--xa name='DB1' connstr="DRIVER={MySQL ODBC 8.4 Unicode Driver};SERVER=123.207.218.225:53306;DATABASE=smj;USER=root;PASSWORD=123456;CHARSET=UTF8;"/-->
+    </xas>
+</root>
