@@ -1,7 +1,7 @@
 #include "core.h"
 #include "CommStruct.h"
 #include "praseconfig.h"
-#include "ystream.h"
+#include "mystream.h"
 #include "tinyxml2.h"
 #include "auto2code.h"
 
@@ -29,14 +29,14 @@ int main() {
 
     core->logger->info("获取所有表信息");
     // 取odbc所有表信息
-    CYStream odbc1(core);
+    CMyStream odbc1(core);
     odbc1.GetAllTables(vcTables);
     odbc1.Close();
     
     core->logger->info("获取所有字段信息");
     // 取odbc所有字段信息
     for (auto& it : vcTables) {
-        CYStream odbc2(core);
+        CMyStream odbc2(core);
         odbc2.GetTableAllAttrs(it);
         odbc2.Close();
     }
@@ -44,7 +44,7 @@ int main() {
     core->logger->info("获取主键信息");
     // 取odbc主键索引信息
     for (auto& it : vcTables) {
-        CYStream odbc3(core);
+        CMyStream odbc3(core);
         odbc3.GetIndex(it);
         odbc3.Close();
     }
